@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zgd.mapper.WsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.zgd.entity.Ws">
+        <id column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="name" property="name" />
+        <result column="gender" property="gender" />
+        <result column="content" property="content" />
+        <result column="autograph" property="autograph" />
+        <result column="email" property="email" />
+        <result column="birthday" property="birthday" />
+        <result column="portrait" property="portrait" />
+    </resultMap>
+<update id="updatetx">
+    update
+        ws
+    <set>
+        <if test="portrait!=null">
+            portrait=#{portrait}
+        </if>
+    </set>
+    where id=#{id}
+</update>
+</mapper>
