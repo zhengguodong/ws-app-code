@@ -4,6 +4,7 @@ package com.zgd.controller;
 import com.zgd.entity.Ws;
 import com.zgd.service.WsService;
 import com.zgd.utils.result;
+import com.zgd.vo.info;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -23,7 +24,6 @@ import java.util.Map;
  * @since 2022-03-21
  */
 @RestController
-@RequestMapping
 public class WsController {
     @Resource
     private WsService wsService;
@@ -56,7 +56,6 @@ public class WsController {
                     return result.fail();
                 }
             } catch (IOException e) {
-
                 return result.fail();
             }
         }
@@ -64,7 +63,48 @@ public class WsController {
 //    登录
     @PostMapping("/login")
     public Object login(@RequestBody Map<String,Object> map){
-        return 1;
+        String username=map.get("username").toString();
+        String password=map.get("password").toString();
+        Ws ws=wsService.checklogin(username,password);
+        if(ws!=null){
+            return result.success(ws);
+        }else{
+            return result.fail();
+        }
 
+
+    }
+//   注册
+    @PostMapping("/register")
+    public Object register(@RequestBody Map<String,Object> map){
+        String username=map.get("username").toString();
+        String password=map.get("password").toString();
+        String gender=map.get("gender").toString();
+        String email=map.get("email").toString();
+        Ws w=new Ws();
+        w.setUsername(username);
+        w.setPassword(password);
+        w.setEmail(email);
+        w.setGender(gender);
+        int num=wsService.register(w);
+        if(num==1){
+            return result.success();
+        }else if(num==2){
+            return result.fail(300,"用户重复！");
+        }else{
+            return result.fail();
+        }
+
+    }
+//    个人信息修改
+    @PostMapping("/setInfo")
+    public Object setInfo(@RequestBody info i){
+        return wsService.updateinfo(i)?result.success():result.fail();
+    }
+//    获取个人数据
+    @PostMapping("/getdata")
+    public Object getdata(@RequestBody Map<String,Integer> map){
+        int id=map.get("id");
+        return wsService.getById(id);
     }
 }
